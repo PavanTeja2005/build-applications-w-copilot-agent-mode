@@ -1,9 +1,8 @@
 import express, { Request, Response } from 'express'
-import mongoose from 'mongoose'
+import dbConfig from './config/database'
 
 const app = express()
 const PORT = process.env.PORT ? Number(process.env.PORT) : 8000
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/octofit'
 
 app.use(express.json())
 
@@ -15,10 +14,9 @@ app.get('/', (_req: Request, res: Response) => {
   res.send('Welcome to OctoFit Tracker backend')
 })
 
-mongoose
-  .connect(MONGO_URI)
+dbConfig.connectDatabase()
   .then(() => {
-    console.log('Connected to MongoDB at', MONGO_URI)
+    console.log('Connected to MongoDB at', dbConfig.uri)
     app.listen(PORT, () => {
       console.log(`Backend listening on http://localhost:${PORT}`)
     })
